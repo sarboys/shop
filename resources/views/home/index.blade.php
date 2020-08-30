@@ -1,11 +1,6 @@
 @extends('layout.main')
-
+@section('title','Главная')
 @section('content')
-
-
-
-
-
     <!-- Home -->
 
     <div class="home">
