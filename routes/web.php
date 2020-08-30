@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/{cat}/{id}', 'ProductController@index')->name('product');
+Route::get('/{cat}', 'ProductController@indexCategory')->name('category');

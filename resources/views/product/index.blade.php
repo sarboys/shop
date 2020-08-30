@@ -36,12 +36,31 @@
                 <!-- Product Image -->
                 <div class="col-lg-6">
                     <div class="details_image">
-                        <div class="details_image_large"><img src="/images/details_1.jpg" alt=""><div class="product_extra product_new"><a href="categories.html">New</a></div></div>
+                        @php
+                            if(count($detail_products->images)>0) {
+                                $image = $detail_products->images[0]['img'];
+                            } else {
+                                $image = 'no_image.png';
+                            }
+                        @endphp
+                        <div class="details_image_large">
+                            <img src="/images/{{$image}}" alt="">
+                            <div class="product_extra product_new">
+                                <a href="{{route('category',$detail_products->category['alias'])}}">{{$detail_products->category['name']}}</a>
+                            </div>
+                        </div>
                         <div class="details_image_thumbnails d-flex flex-row align-items-start justify-content-between">
-                            <div class="details_image_thumbnail active" data-image="/images/details_1.jpg"><img src="/images/details_1.jpg" alt=""></div>
-                            <div class="details_image_thumbnail" data-image="/images/details_2.jpg"><img src="/images/details_2.jpg" alt=""></div>
-                            <div class="details_image_thumbnail" data-image="/images/details_3.jpg"><img src="/images/details_3.jpg" alt=""></div>
-                            <div class="details_image_thumbnail" data-image="/images/details_4.jpg"><img src="/images/details_4.jpg" alt=""></div>
+                            @if($image=='no_image.png')
+
+                                    @else
+                                    @foreach($detail_products->images as $img)
+                                        @if ($loop->first)
+                                        <div class="details_image_thumbnail active" data-image="/images/{{$img['img']}}"><img src="/images/{{$img['img']}}" alt=""></div>
+                                            @else
+                                        <div class="details_image_thumbnail" data-image="/images/{{$img['img']}}"><img src="/images/{{$img['img']}}" alt=""></div>
+                                        @endif
+                                    @endforeach
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -50,16 +69,25 @@
                 <div class="col-lg-6">
                     <div class="details_content">
                         <div class="details_name">{{$detail_products->name}}</div>
-                        <div class="details_discount">$890</div>
-                        <div class="details_price">$670</div>
+                        @if($detail_products->new_price != null)
+                            <div class="details_discount">${{$detail_products->price}}</div>
+                            <div class="details_price">${{$detail_products->new_price}}</div>
+                        @else
+                            <div class="details_price">${{$detail_products->price}}</div>
+                        @endif
+
 
                         <!-- In Stock -->
                         <div class="in_stock_container">
                             <div class="availability">Availability:</div>
-                            <span>In Stock</span>
+                            @if($detail_products->in_stock)
+                                <span>В наличии</span>
+                            @else
+                                <span style="color:red;">Нет в наличии</span>
+                            @endif
                         </div>
                         <div class="details_text">
-                            <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit. Mauris consequat nisi ut mauris efficitur lacinia.</p>
+                            <p>{{$detail_products->description}}</p>
                         </div>
 
                         <!-- Product Quantity -->
@@ -96,7 +124,7 @@
                         <div class="reviews_title"><a href="#">Reviews <span>(1)</span></a></div>
                     </div>
                     <div class="description_text">
-                        <p>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Phasellus id nisi quis justo tempus mollis sed et dui. In hac habitasse platea dictumst. Suspendisse ultrices mauris diam. Nullam sed aliquet elit. Mauris consequat nisi ut mauris efficitur lacinia.</p>
+                        <p>{{$detail_products->description}}</p>
                     </div>
                 </div>
             </div>
