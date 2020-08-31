@@ -43,10 +43,12 @@
                                         <span class="sorting_text">Sort by</span>
                                         <i class="fa fa-chevron-down" aria-hidden="true"></i>
                                         <ul>
-                                            <li class="product_sorting_btn" data-isotope-option='{ "sortBy": "original-order" }'><span>Default</span></li>
-                                            <li class="product_sorting_btn" data-isotope-option='{ "sortBy": "price" }'><span>Price</span></li>
-                                            <li class="product_sorting_btn" data-isotope-option='{ "sortBy": "stars" }'><span>Name</span></li>
-                                        </ul>
+                                                <li class="product_sorting_btnT"><span>Default</span></li>
+                                                <li class="product_sorting_btnT" data-order="price_low_high"><span>Price Low-High</span></li>
+                                                <li class="product_sorting_btnT" data-order="price_high_low"><span>Price High-Low</span></li>
+                                                <li class="product_sorting_btnT" data-order="name_az"><span>Name A-Z</span></li>
+                                                <li class="product_sorting_btnT" data-order="name_za"><span>Name Z-A</span></li>
+                                            </ul>
                                     </li>
                                 </ul>
                             </div>
@@ -58,7 +60,7 @@
                 <div class="col">
 
                     <div class="product_grid">
-                        @foreach($cat->products as $product)
+                        @foreach($products as $product)
                             @php
                                 if(count($product->images)>0) {
 	                                $image = $product->images[0]['img'];
@@ -170,4 +172,27 @@
 
 
 
+@endsection
+@section('js')
+    <script>
+        $(document).ready(function () {
+            $('.product_sorting_btnT').on('click',function () {
+                let orderBy = $(this).data('order');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url:"{{route('category',$cat->alias)}}",
+                    type:'get',
+                    data:{
+                        orderBy :orderBy
+                    },
+                    success:function (data) {
+                        $('.product_grid').empty();
+                        $('.product_grid').html(data);
+                    }
+                })
+            });
+        });
+    </script>
 @endsection

@@ -16,11 +16,22 @@ class ProductController extends Controller
         ]);
     }
 
-    public function indexCategory ($cat) {
+    public function indexCategory ($cat,Request $request) {
         $cat = Category::where('alias',$cat)->first();
+        $products = Product::where('category_id',$cat->id)->get();
 
+
+        if(isset($request->orderBy)) {
+            if($request->orderBy == 'price_low_high') {
+                $products = Product::where('category_id',$cat->id)->orderBy('price')->get();
+            }
+        }
+        if($request->ajax()) {
+            return view('/ajax/order',['products'=> $products])->render();
+        }
         return view('/categories/index',[
-            'cat'=>$cat
+            'cat'=>$cat,
+            'products'=>$products
         ]);
     }
 }
