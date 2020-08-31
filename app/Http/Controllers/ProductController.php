@@ -17,13 +17,15 @@ class ProductController extends Controller
     }
 
     public function indexCategory ($cat,Request $request) {
+        $paginate = 2;
+
         $cat = Category::where('alias',$cat)->first();
-        $products = Product::where('category_id',$cat->id)->get();
+        $products = Product::where('category_id',$cat->id)->paginate($paginate);
 
 
         if(isset($request->orderBy)) {
             if($request->orderBy == 'price_low_high') {
-                $products = Product::where('category_id',$cat->id)->orderBy('price')->get();
+                $products = Product::where('category_id',$cat->id)->orderBy('price')->paginate($paginate);
             }
         }
         if($request->ajax()) {

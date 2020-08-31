@@ -89,6 +89,7 @@
 
                     </div>
                     <div class="product_pagination">
+                        {{$products->appends(request()->query())->links()}}
                         <ul>
                             <li class="active"><a href="#">01.</a></li>
                             <li><a href="#">02.</a></li>
